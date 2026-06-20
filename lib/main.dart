@@ -76,7 +76,7 @@ class WaterDeliveryApp extends StatelessWidget {
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.system,
         // अभी के लिए सीधे AdminHomeScreen() पर रख रहे हैं ताकि आप इसकी टेस्टिंग कर सकें
-        home: const AdminHomeScreen(), 
+        home:LoginScreen(), 
       ),
     );
   }
