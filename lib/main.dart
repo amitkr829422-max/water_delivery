@@ -12,6 +12,12 @@ import 'features/customer/data/customer_repository_impl.dart';
 import 'features/customer/domain/get_products_usecase.dart';
 import 'features/customer/presentation/customer_bloc.dart';
 import 'features/customer/presentation/customer_home_screen.dart';
+// Delivery Imports
+import 'features/delivery/data/delivery_repository_impl.dart';
+import 'features/delivery/domain/get_pending_orders_usecase.dart';
+import 'features/delivery/domain/mark_order_delivered_usecase.dart';
+import 'features/delivery/presentation/delivery_bloc.dart';
+import 'features/delivery/presentation/delivery_home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +32,7 @@ class WaterDeliveryApp extends StatelessWidget {
     // रिपॉजिटरीज़ का इंस्टेंस बनाना
     final authRepository = AuthRepositoryImpl();
     final customerRepository = CustomerRepositoryImpl();
+    final deliveryRepository = DeliveryRepositoryImpl();
 
     return MultiBlocProvider(
       providers: [
@@ -40,6 +47,12 @@ class WaterDeliveryApp extends StatelessWidget {
             getProductsUseCase: GetProductsUseCase(repository: customerRepository),
           ),
         ),
+        BlocProvider<DeliveryBloc>(
+          create: (context) => DeliveryBloc(
+            getPendingOrdersUseCase: GetPendingOrdersUseCase(repository: deliveryRepository),
+            markOrderDeliveredUseCase: MarkOrderDeliveredUseCase(repository: deliveryRepository),
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'Water Delivery',
@@ -47,12 +60,11 @@ class WaterDeliveryApp extends StatelessWidget {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.system,
-        // अभी के लिए हम सीधे CustomerHomeScreen() पर रख रहे हैं ताकि आप यूआई देख सकें
-        // बाद में इसे लॉगिन स्क्रीन से कंडीशनल नेविगेट करेंगे
-        home: const CustomerHomeScreen(), 
+        // अभी के लिए हम सीधे DeliveryHomeScreen() पर रख रहे हैं ताकि आप इसका यूआई और वर्किंग टेस्ट कर सकें
+        // बाद में इसे लॉगिन रोल के हिसाब से नेविगेट करेंगे
+        home: const DeliveryHomeScreen(), 
       ),
     );
   }
-}
 }
 
