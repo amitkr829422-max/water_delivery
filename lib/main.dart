@@ -18,6 +18,13 @@ import 'features/delivery/domain/get_pending_orders_usecase.dart';
 import 'features/delivery/domain/mark_order_delivered_usecase.dart';
 import 'features/delivery/presentation/delivery_bloc.dart';
 import 'features/delivery/presentation/delivery_home_screen.dart';
+// Admin Imports
+import 'features/admin/data/admin_repository_impl.dart';
+import 'features/admin/domain/add_product_usecase.dart';
+import 'features/admin/domain/update_product_usecase.dart';
+import 'features/admin/domain/delete_product_usecase.dart';
+import 'features/admin/presentation/admin_bloc.dart';
+import 'features/admin/presentation/admin_home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +40,7 @@ class WaterDeliveryApp extends StatelessWidget {
     final authRepository = AuthRepositoryImpl();
     final customerRepository = CustomerRepositoryImpl();
     final deliveryRepository = DeliveryRepositoryImpl();
+    final adminRepository = AdminRepositoryImpl();
 
     return MultiBlocProvider(
       providers: [
@@ -53,6 +61,13 @@ class WaterDeliveryApp extends StatelessWidget {
             markOrderDeliveredUseCase: MarkOrderDeliveredUseCase(repository: deliveryRepository),
           ),
         ),
+        BlocProvider<AdminBloc>(
+          create: (context) => AdminBloc(
+            addProductUseCase: AddProductUseCase(repository: adminRepository),
+            updateProductUseCase: UpdateProductUseCase(repository: adminRepository),
+            deleteProductUseCase: DeleteProductUseCase(repository: adminRepository),
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'Water Delivery',
@@ -60,9 +75,8 @@ class WaterDeliveryApp extends StatelessWidget {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.system,
-        // अभी के लिए हम सीधे DeliveryHomeScreen() पर रख रहे हैं ताकि आप इसका यूआई और वर्किंग टेस्ट कर सकें
-        // बाद में इसे लॉगिन रोल के हिसाब से नेविगेट करेंगे
-        home: const DeliveryHomeScreen(), 
+        // अभी के लिए सीधे AdminHomeScreen() पर रख रहे हैं ताकि आप इसकी टेस्टिंग कर सकें
+        home: const AdminHomeScreen(), 
       ),
     );
   }
