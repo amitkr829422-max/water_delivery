@@ -1,3 +1,5 @@
+// 5. ऑर्डर सफलतापूर्वक प्लेस होने की स्थिति
+class OrderSuccessState extends CustomerState {}
 import '../data/product_model.dart';
 
 abstract class CustomerState {}

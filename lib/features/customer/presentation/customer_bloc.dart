@@ -8,16 +8,33 @@ class CustomerBloc extends Bloc<CustomerEvent, CustomerState> {
 
   CustomerBloc({required this.getProductsUseCase}) : super(CustomerInitial()) {
     
-    // जब LoadProductsEvent ट्रि格 होगा (यानी स्क्रीन लोड होगी)
+    // 1. प्रोडक्ट्स लोड करने का लॉजिक (पुराना)
     on<LoadProductsEvent>((event, emit) async {
       emit(CustomerLoading());
       try {
-        // UseCase के ज़रिए Firestore से डेटा मंगाना
         final products = await getProductsUseCase.call();
         emit(ProductsLoadedState(products: products));
       } catch (e) {
         emit(CustomerErrorState(errorMessage: e.toString()));
       }
     });
+
+    // 2. नया लॉजिक: ऑर्डर प्लेस करने का
+    on<PlaceOrderEvent>((event, emit) async {
+      emit(CustomerLoading());
+      try {
+        // अभी के लिए हम 'dummy_customer_id' यूज़ कर रहे हैं, बाद में इसे Firebase Auth से जोड़ेंगे
+        await getProductsUseCase.repository.placeOrder(
+          customerId: 'dummy_customer_id',
+          items: event.items,
+          totalAmount: event.totalAmount,
+          deliveryAddress: event.deliveryAddress,
+        );
+        emit(OrderSuccessState());
+      } catch (e) {
+        emit(CustomerErrorState(errorMessage: e.toString()));
+      }
+    });
   }
 }
+
