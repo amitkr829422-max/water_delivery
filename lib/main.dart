@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'app/config/theme.dart';
+// Auth Imports
 import 'features/auth/data/auth_repository_impl.dart';
 import 'features/auth/domain/send_otp_usecase.dart';
 import 'features/auth/domain/verify_otp_usecase.dart';
 import 'features/auth/presentation/auth_bloc.dart';
 import 'features/auth/presentation/login_screen.dart';
+// Customer Imports
+import 'features/customer/data/customer_repository_impl.dart';
+import 'features/customer/domain/get_products_usecase.dart';
+import 'features/customer/presentation/customer_bloc.dart';
+import 'features/customer/presentation/customer_home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,8 +23,9 @@ class WaterDeliveryApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // पूरे ऐप को रिपॉजिटरी और ब्लॉक का एक्सेस देना
+    // रिपॉजिटरीज़ का इंस्टेंस बनाना
     final authRepository = AuthRepositoryImpl();
+    final customerRepository = CustomerRepositoryImpl();
 
     return MultiBlocProvider(
       providers: [
@@ -28,6 +35,11 @@ class WaterDeliveryApp extends StatelessWidget {
             roleBasedVerifyOTPUseCase: VerifyOTPUseCase(repository: authRepository),
           ),
         ),
+        BlocProvider<CustomerBloc>(
+          create: (context) => CustomerBloc(
+            getProductsUseCase: GetProductsUseCase(repository: customerRepository),
+          ),
+        ),
       ],
       child: MaterialApp(
         title: 'Water Delivery',
@@ -35,9 +47,12 @@ class WaterDeliveryApp extends StatelessWidget {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: ThemeMode.system,
-        home: const LoginScreen(), // ऐप अब सीधे लॉगिन स्क्रीन से शुरू होगा
+        // अभी के लिए हम सीधे CustomerHomeScreen() पर रख रहे हैं ताकि आप यूआई देख सकें
+        // बाद में इसे लॉगिन स्क्रीन से कंडीशनल नेविगेट करेंगे
+        home: const CustomerHomeScreen(), 
       ),
     );
   }
+}
 }
 
