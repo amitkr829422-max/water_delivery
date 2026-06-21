@@ -25,3 +25,6 @@ android {
         versionName "1.0.0"
     }
 }
+dependencies {
+    // यहाँ कोई पुरानी kotlin-stdlib लाइन नहीं डालनी है, इसे बस खाली रखना है
+}
